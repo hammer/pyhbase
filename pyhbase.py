@@ -104,15 +104,43 @@ class HBaseConnection(object):
     """
     return self._make_rows_nice(self.client.getRow(table_name, row_id))
 
-# TODO: Warning, the command line methods haven't been tested for bitrot
+  @retry_wrapper
+  def compact(self, table_name):
+    return self.client.compact(table_name)
+
+  @retry_wrapper
+  def major_compact(self, table_name):
+    return self.client.majorCompact(table_name)
+
+  @retry_wrapper
+  def get_table_regions(self, table_name):
+    return self.client.getTableRegions(table_name)
+
+  @retry_wrapper
+  def put(self, table_name, r, cf, c, v):
+    m = self.mutationClass(0, ':'.join([cf,c]), v)
+    return self.client.mutateRow(table_name, r, [m])
+
+  @retry_wrapper
+  def scan(self, table_name, r, cf, n):
+    s = self.client.scannerOpen(table_name, r, [cf])
+    return self.client.scannerGetList(s, int(n))
+
 if __name__=="__main__":
   def usage():
     print """
   Usage: %s [-h host[:port]] command [arg1 [arg2...]]
 
   Commands:
+      compact table_name
+      major_compact table_name
+
       describe_table table_name
+      get_table_regions table_name
+
       get_full_row table_name row_id
+      put table_name row_id column_family column value
+      scan table_name start_row_id columns number_of_rows
   """ % sys.argv[0]
 
   if len(sys.argv) <= 1 or sys.argv[1] == '--help':
@@ -145,6 +173,36 @@ if __name__=="__main__":
       usage()
       sys.exit(1)
     print connection.get_full_row(*args)
+  elif cmd == 'compact':
+    if len(args) != 1:
+      usage()
+      sys.exit(1)
+    print connection.compact(*args)
+  elif cmd == 'major_compact':
+    if len(args) != 1:
+      usage()
+      sys.exit(1)
+    print connection.major_compact(*args)
+  elif cmd == 'get_table_regions':
+    if len(args) != 1:
+      usage()
+      sys.exit(1)
+    print connection.get_table_regions(*args)
+  elif cmd == 'put':
+    if len(args) != 5:
+      usage()
+      sys.exit(1)
+    print connection.put(*args)
+  elif cmd == 'get_table_regions':
+    if len(args) != 1:
+      usage()
+      sys.exit(1)
+    print connection.get_table_regions(*args)
+  elif cmd == 'scan':
+    if len(args) != 4:
+      usage()
+      sys.exit(1)
+    print connection.scan(*args)
   else:
     usage()
     sys.exit(1)

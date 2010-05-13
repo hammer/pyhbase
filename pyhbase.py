@@ -1,5 +1,7 @@
 #! /usr/bin/env python
+import datetime
 import sys
+import time
 
 from thrift import Thrift
 from thrift.transport import TSocket, TTransport
@@ -91,7 +93,7 @@ class HBaseConnection(object):
     """
     Pull out the contents of the thrift column result objects into a python dict
     """
-    return dict(((x,y.value) for x,y in client_row_object.columns.items()))
+    return dict(((x,(y.value,y.timestamp)) for x,y in client_row_object.columns.items()))
 
   @retry_wrapper
   def describe_table(self,table_name):
@@ -103,6 +105,10 @@ class HBaseConnection(object):
     Get back every column value for a specific row_id
     """
     return self._make_rows_nice(self.client.getRow(table_name, row_id))
+
+  @retry_wrapper
+  def get_cell_versions(self, table_name, row_id, column, n):
+    return self.client.getVer(table_name, row_id, column, int(n))
 
   @retry_wrapper
   def compact(self, table_name):
@@ -124,7 +130,9 @@ class HBaseConnection(object):
   @retry_wrapper
   def scan(self, table_name, r, cf, n):
     s = self.client.scannerOpen(table_name, r, [cf])
-    return self.client.scannerGetList(s, int(n))
+    cells = self.client.scannerGetList(s, int(n)) 
+    self.client.scannerClose(s)
+    return cells
 
 if __name__=="__main__":
   def usage():
@@ -139,6 +147,7 @@ if __name__=="__main__":
       get_table_regions table_name
 
       get_full_row table_name row_id
+      get_cell_versions table_name row_id column number_of_versions
       put table_name row_id column_family column value
       scan table_name start_row_id columns number_of_rows
   """ % sys.argv[0]
@@ -198,11 +207,16 @@ if __name__=="__main__":
       usage()
       sys.exit(1)
     print connection.get_table_regions(*args)
-  elif cmd == 'scan':
+  elif cmd == 'get_cell_versions':
     if len(args) != 4:
       usage()
       sys.exit(1)
-    print connection.scan(*args)
+    print connection.get_cell_versions(*args)
+  elif cmd == 'get_cell_since':
+    if len(args) != 5:
+      usage()
+      sys.exit(1)
+    print connection.get_cell_versions(*args)
   else:
     usage()
     sys.exit(1)

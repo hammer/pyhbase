@@ -4,7 +4,9 @@ Borrows from the [Mozilla client](http://code.google.com/p/socorro/source/browse
 
 You can find this project on PyPI as [PyHBase](http://pypi.python.org/pypi/PyHBase/). To install, run:
 
-  $ sudo pip install pyhbase
+    $ sudo pip install pyhbase
+
+
 
 
 

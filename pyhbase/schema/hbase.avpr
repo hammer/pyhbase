@@ -1,0 +1,49 @@
+{"namespace": "org.apache.hadoop.hbase.avro.generated",
+ "protocol": "HBase",
+
+ "types": [
+     {"name": "TCell", "type": "record",
+      "fields": [
+          {"name": "value",   "type": "bytes"},
+          {"name": "timestamp", "type": "long"}
+      ]
+     },
+     {"name": "IOError", "type": "error",
+      "fields": [
+          {"name": "message", "type": "string"}
+      ]
+     }
+ ],
+
+ "messages": {
+     "enableTable": {
+         "request": [{"name": "tableName", "type": "bytes"}],
+         "response": "null",
+         "errors": ["IOError"]
+     },
+     "disableTable": {
+         "request": [{"name": "tableName", "type": "bytes"}],
+         "response": "null",
+         "errors": ["IOError"]
+     },
+     "isTableEnabled": {
+         "request": [{"name": "tableName", "type": "bytes"}],
+         "response": "boolean",
+         "errors": ["IOError"]
+     },
+     "getTableNames": {
+         "request": [],
+         "response": {"type": "array", "items": "bytes"},
+         "errors": ["IOError"]
+     },
+     "get": {
+         "request": [{"name": "tableName", "type": "bytes"},
+                     {"name": "row", "type": "bytes"},
+                     {"name": "family", "type": "bytes"},
+                     {"name": "qualifier", "type": "bytes"}
+                    ],
+         "response": {"type": "array", "items": "TCell"},
+         "errors": ["IOError"]
+     }
+ }
+}

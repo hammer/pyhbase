@@ -11,12 +11,12 @@ if __name__=="__main__":
 
   Commands:
       show_tables
-      is_table_enabled table_name
+      is_table_enabled table
 
-      enable_table table_name
-      disable_table table_name
+      enable_table table
+      disable_table table
 
-      get table_name row family qualifier
+      get table row
   """ % sys.argv[0]
 
   if len(sys.argv) <= 1 or sys.argv[1] == '--help':
@@ -60,7 +60,7 @@ if __name__=="__main__":
       sys.exit(1)
     print connection.disable_table(*args)
   elif cmd == 'get':
-    if len(args) != 4:
+    if len(args) != 2:
       usage()
       sys.exit(1)
     print connection.get(*args)

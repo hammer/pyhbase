@@ -57,29 +57,29 @@ class HBaseConnection(object):
     return self.requestor.request("getTableNames", {})
 
   @retry_wrapper
-  def is_table_enabled(self, table_name):
+  def is_table_enabled(self, table):
     """Determine if a table is enabled."""
-    return self.requestor.request("isTableEnabled", {"tableName": table_name})
+    return self.requestor.request("isTableEnabled", {"table": table})
 
   #
   # Administrative Operations
   #
 
   @retry_wrapper
-  def enable_table(self, table_name):
-    return self.requestor.request("enableTable", {"tableName": table_name})
+  def enable_table(self, table):
+    return self.requestor.request("enableTable", {"table": table})
 
   @retry_wrapper
-  def disable_table(self, table_name):
-    return self.requestor.request("disableTable", {"tableName": table_name})
+  def disable_table(self, table):
+    return self.requestor.request("disableTable", {"table": table})
 
   #
   # Get
   #
 
   @retry_wrapper
-  def get(self, table_name, row, family, qualifier):
-    params = {"tableName": table_name, "row": row, "family": family, "qualifier": qualifier}
+  def get(self, table, row):
+    params = {"table": table, "get": {"row": row}}
     return self.requestor.request("get", params)
 
   #

@@ -52,9 +52,9 @@ class HBaseConnection(object):
   #
 
   @retry_wrapper
-  def show_tables(self):
-    """Grab table names."""
-    return self.requestor.request("getTableNames", {})
+  def list_tables(self):
+    """Grab table information."""
+    return self.requestor.request("listTables", {})
 
   @retry_wrapper
   def is_table_enabled(self, table):
@@ -64,6 +64,13 @@ class HBaseConnection(object):
   #
   # Administrative Operations
   #
+
+  @retry_wrapper
+  def create_table(self, table, *families):
+    table_descriptor = {"name": table}
+    families = [{"name": family} for family in families]
+    if families: table_descriptor["families"] = families
+    return self.requestor.request("createTable", {"table": table_descriptor})
 
   @retry_wrapper
   def enable_table(self, table):
@@ -78,8 +85,14 @@ class HBaseConnection(object):
   #
 
   @retry_wrapper
-  def get(self, table, row):
-    params = {"table": table, "get": {"row": row}}
+  def get(self, table, row, *columns):
+    get = {"row": row}
+
+    # from my upcoming book, "how to abuse python for recovering perl addicts"
+    columns = [len(column) > 1 and {"family": column[0], "qualifier": column[1]} or {"family": column[0]}
+               for column in map(lambda s: s.split(":"), columns)]
+    if columns: get["columns"] = columns
+    params = {"table": table, "get": get}
     return self.requestor.request("get", params)
 
   #

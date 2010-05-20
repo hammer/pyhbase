@@ -2,6 +2,69 @@
   "protocol" : "HBase",
   "namespace" : "org.apache.hadoop.hbase.avro.generated",
   "types" : [ {
+    "type" : "enum",
+    "name" : "ACompressionAlgorithm",
+    "symbols" : [ "LZO", "GZ", "NONE" ]
+  }, {
+    "type" : "record",
+    "name" : "AFamilyDescriptor",
+    "fields" : [ {
+      "name" : "name",
+      "type" : "bytes"
+    }, {
+      "name" : "compression",
+      "type" : [ "ACompressionAlgorithm", "null" ]
+    }, {
+      "name" : "maxVersions",
+      "type" : [ "int", "null" ]
+    }, {
+      "name" : "blocksize",
+      "type" : [ "int", "null" ]
+    }, {
+      "name" : "inMemory",
+      "type" : [ "boolean", "null" ]
+    }, {
+      "name" : "timeToLive",
+      "type" : [ "int", "null" ]
+    }, {
+      "name" : "blockCacheEnabled",
+      "type" : [ "boolean", "null" ]
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "ATableDescriptor",
+    "fields" : [ {
+      "name" : "name",
+      "type" : "bytes"
+    }, {
+      "name" : "families",
+      "type" : [ {
+        "type" : "array",
+        "items" : "AFamilyDescriptor"
+      }, "null" ]
+    }, {
+      "name" : "maxFileSize",
+      "type" : [ "long", "null" ]
+    }, {
+      "name" : "memStoreFlushSize",
+      "type" : [ "long", "null" ]
+    }, {
+      "name" : "rootRegion",
+      "type" : [ "boolean", "null" ]
+    }, {
+      "name" : "metaRegion",
+      "type" : [ "boolean", "null" ]
+    }, {
+      "name" : "metaTable",
+      "type" : [ "boolean", "null" ]
+    }, {
+      "name" : "readOnly",
+      "type" : [ "boolean", "null" ]
+    }, {
+      "name" : "deferredLogFlush",
+      "type" : [ "boolean", "null" ]
+    } ]
+  }, {
     "type" : "record",
     "name" : "AColumn",
     "fields" : [ {
@@ -79,8 +142,37 @@
       "name" : "message",
       "type" : "string"
     } ]
+  }, {
+    "type" : "error",
+    "name" : "AIllegalArgument",
+    "fields" : [ {
+      "name" : "message",
+      "type" : "string"
+    } ]
+  }, {
+    "type" : "error",
+    "name" : "ATableExists",
+    "fields" : [ {
+      "name" : "message",
+      "type" : "string"
+    } ]
+  }, {
+    "type" : "error",
+    "name" : "AMasterNotRunning",
+    "fields" : [ {
+      "name" : "message",
+      "type" : "string"
+    } ]
   } ],
   "messages" : {
+    "createTable" : {
+      "request" : [ {
+        "name" : "table",
+        "type" : "ATableDescriptor"
+      } ],
+      "response" : "null",
+      "errors" : [ "AIOError", "AIllegalArgument", "ATableExists", "AMasterNotRunning" ]
+    },
     "enableTable" : {
       "request" : [ {
         "name" : "table",
@@ -105,11 +197,11 @@
       "response" : "boolean",
       "errors" : [ "AIOError" ]
     },
-    "getTableNames" : {
+    "listTables" : {
       "request" : [ ],
       "response" : {
         "type" : "array",
-        "items" : "bytes"
+        "items" : "ATableDescriptor"
       },
       "errors" : [ "AIOError" ]
     },

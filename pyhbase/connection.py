@@ -59,6 +59,16 @@ class HBaseConnection(object):
     return self.requestor.request("listTables", {})
 
   @retry_wrapper
+  def describe_table(self, table):
+    """Grab table information."""
+    return self.requestor.request("describeTable", {"table": table})
+
+  @retry_wrapper
+  def describe_family(self, table, family):
+    """Grab family information."""
+    return self.requestor.request("describeFamily", {"table": table, "family": family})
+
+  @retry_wrapper
   def is_table_enabled(self, table):
     """Determine if a table is enabled."""
     return self.requestor.request("isTableEnabled", {"table": table})

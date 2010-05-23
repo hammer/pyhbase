@@ -234,6 +234,25 @@
       },
       "errors" : [ "AIOError" ]
     },
+    "describeTable" : {
+      "request" : [ {
+        "name" : "table",
+        "type" : "bytes"
+      } ],
+      "response" : "ATableDescriptor",
+      "errors" : [ "AIOError" ]
+    },
+    "describeFamily" : {
+      "request" : [ {
+        "name" : "table",
+        "type" : "bytes"
+      }, {
+        "name" : "family",
+        "type" : "bytes"
+      } ],
+      "response" : "AFamilyDescriptor",
+      "errors" : [ "AIOError" ]
+    },
     "get" : {
       "request" : [ {
         "name" : "table",

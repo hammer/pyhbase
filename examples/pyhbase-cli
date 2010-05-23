@@ -22,6 +22,8 @@ if __name__=="__main__":
       get table row [family1[:qualifier1] [family2[:qualifier2] ...]]
 
       put table row family1:qualifier1 value1 [family2:qualifier2 value2 ...]
+
+      scan table number_of_rows
   """ % sys.argv[0]
 
   if len(sys.argv) <= 1 or sys.argv[1] == '--help':
@@ -89,6 +91,11 @@ if __name__=="__main__":
       usage()
       sys.exit(1)
     print connection.put(*args)
+  elif cmd == 'scan':
+    if len(args) != 2:
+      usage()
+      sys.exit(1)
+    print connection.scan(*args)
   else:
     usage()
     sys.exit(1)

@@ -130,3 +130,12 @@ class HBaseConnection(object):
   # Scan
   #
 
+  # TODO(hammer): Figure out cleaner, more functional command-line
+  @retry_wrapper
+  def scan(self, table, number_of_rows):
+    params = {"table": table, "scan": {}}
+    scanner_id = self.requestor.request("scannerOpen", params)
+    results = self.requestor.request("scannerGetRows", {"scannerId": scanner_id, "numberOfRows": int(number_of_rows)})
+    self.requestor.request("scannerClose", {"scannerId": scanner_id})
+    return results
+

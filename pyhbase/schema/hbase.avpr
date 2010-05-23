@@ -165,6 +165,31 @@
       }
     } ]
   }, {
+    "type" : "record",
+    "name" : "AScan",
+    "fields" : [ {
+      "name" : "startRow",
+      "type" : [ "bytes", "null" ]
+    }, {
+      "name" : "stopRow",
+      "type" : [ "bytes", "null" ]
+    }, {
+      "name" : "columns",
+      "type" : [ {
+        "type" : "array",
+        "items" : "AColumn"
+      }, "null" ]
+    }, {
+      "name" : "timestamp",
+      "type" : [ "long", "null" ]
+    }, {
+      "name" : "timerange",
+      "type" : [ "ATimeRange", "null" ]
+    }, {
+      "name" : "maxVersions",
+      "type" : [ "int", "null" ]
+    } ]
+  }, {
     "type" : "error",
     "name" : "AIOError",
     "fields" : [ {
@@ -274,6 +299,39 @@
       } ],
       "response" : "null",
       "errors" : [ "AIOError" ]
+    },
+    "scannerOpen" : {
+      "request" : [ {
+        "name" : "table",
+        "type" : "bytes"
+      }, {
+        "name" : "scan",
+        "type" : "AScan"
+      } ],
+      "response" : "int",
+      "errors" : [ "AIOError" ]
+    },
+    "scannerClose" : {
+      "request" : [ {
+        "name" : "scannerId",
+        "type" : "int"
+      } ],
+      "response" : "null",
+      "errors" : [ "AIOError", "AIllegalArgument" ]
+    },
+    "scannerGetRows" : {
+      "request" : [ {
+        "name" : "scannerId",
+        "type" : "int"
+      }, {
+        "name" : "numberOfRows",
+        "type" : "int"
+      } ],
+      "response" : {
+        "type" : "array",
+        "items" : "AResult"
+      },
+      "errors" : [ "AIOError", "AIllegalArgument" ]
     }
   }
 }

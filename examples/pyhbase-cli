@@ -18,6 +18,8 @@ if __name__=="__main__":
       disable_table table
 
       get table row [family1[:qualifier1] [family2[:qualifier2] ...]]
+
+      put table row family1:qualifier1 value1 [family2:qualifier2 value2 ...]
   """ % sys.argv[0]
 
   if len(sys.argv) <= 1 or sys.argv[1] == '--help':
@@ -70,6 +72,11 @@ if __name__=="__main__":
       usage()
       sys.exit(1)
     print connection.get(*args)
+  elif cmd == 'put':
+    if len(args) < 4 or not len(args) % 2 == 0:
+      usage()
+      sys.exit(1)
+    print connection.put(*args)
   else:
     usage()
     sys.exit(1)

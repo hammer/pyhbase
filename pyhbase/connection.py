@@ -47,6 +47,8 @@ class HBaseConnection(object):
     exceptionType, exception, tracebackInfo = sys.exc_info()
     raise exception
 
+  # TODO(hammer): classify these methods like the HBase shell
+
   #
   # Metadata
   #
@@ -84,11 +86,11 @@ class HBaseConnection(object):
   # Get
   #
 
+  # TODO(hammer): Figure out how to get binary keys
+  # TODO(hammer): Do this parsing logic in pyhbase-cli?
   @retry_wrapper
   def get(self, table, row, *columns):
     get = {"row": row}
-
-    # from my upcoming book, "how to abuse python for recovering perl addicts"
     columns = [len(column) > 1 and {"family": column[0], "qualifier": column[1]} or {"family": column[0]}
                for column in map(lambda s: s.split(":"), columns)]
     if columns: get["columns"] = columns
@@ -98,6 +100,17 @@ class HBaseConnection(object):
   #
   # Put
   #
+
+  # TODO(hammer): Figure out how to incorporate timestamps
+  # TODO(hammer): Do this parsing logic in pyhbase-cli?
+  @retry_wrapper
+  def put(self, table, row, *column_values):
+    put = {"row": row}
+    column_values = [{"family": column.split(":")[0], "qualifier": column.split(":")[1], "value": value}
+                     for column, value in zip(column_values[::2], column_values[1::2])]
+    put["columnValues"] = column_values
+    params = {"table": table, "put": put}
+    return self.requestor.request("put", params)
 
   #
   # Delete

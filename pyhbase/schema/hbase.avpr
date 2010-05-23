@@ -136,6 +136,35 @@
       "type" : [ "int", "null" ]
     } ]
   }, {
+    "type" : "record",
+    "name" : "AColumnValue",
+    "fields" : [ {
+      "name" : "family",
+      "type" : "bytes"
+    }, {
+      "name" : "qualifier",
+      "type" : "bytes"
+    }, {
+      "name" : "value",
+      "type" : "bytes"
+    }, {
+      "name" : "timestamp",
+      "type" : [ "long", "null" ]
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "APut",
+    "fields" : [ {
+      "name" : "row",
+      "type" : "bytes"
+    }, {
+      "name" : "columnValues",
+      "type" : {
+        "type" : "array",
+        "items" : "AColumnValue"
+      }
+    } ]
+  }, {
     "type" : "error",
     "name" : "AIOError",
     "fields" : [ {
@@ -214,6 +243,17 @@
         "type" : "AGet"
       } ],
       "response" : "AResult",
+      "errors" : [ "AIOError" ]
+    },
+    "put" : {
+      "request" : [ {
+        "name" : "table",
+        "type" : "bytes"
+      }, {
+        "name" : "put",
+        "type" : "APut"
+      } ],
+      "response" : "null",
       "errors" : [ "AIOError" ]
     }
   }

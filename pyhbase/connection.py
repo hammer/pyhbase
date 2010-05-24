@@ -126,6 +126,15 @@ class HBaseConnection(object):
   # Delete
   #
 
+  @retry_wrapper
+  def delete(self, table, row, *columns):
+    delete = {"row": row}
+    columns = [len(column) > 1 and {"family": column[0], "qualifier": column[1]} or {"family": column[0]}
+               for column in map(lambda s: s.split(":"), columns)]
+    if columns: delete["columns"] = columns
+    params = {"table": table, "delete": delete}
+    return self.requestor.request("delete", params)
+
   #
   # Scan
   #

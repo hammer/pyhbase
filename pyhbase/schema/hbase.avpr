@@ -190,6 +190,19 @@
       "type" : [ "int", "null" ]
     } ]
   }, {
+    "type" : "record",
+    "name" : "ADelete",
+    "fields" : [ {
+      "name" : "row",
+      "type" : "bytes"
+    }, {
+      "name" : "columns",
+      "type" : [ {
+        "type" : "array",
+        "items" : "AColumn"
+      }, "null" ]
+    } ]
+  }, {
     "type" : "error",
     "name" : "AIOError",
     "fields" : [ {
@@ -332,6 +345,17 @@
         "items" : "AResult"
       },
       "errors" : [ "AIOError", "AIllegalArgument" ]
+    },
+    "delete" : {
+      "request" : [ {
+        "name" : "table",
+        "type" : "bytes"
+      }, {
+        "name" : "delete",
+        "type" : "ADelete"
+      } ],
+      "response" : "null",
+      "errors" : [ "AIOError" ]
     }
   }
 }

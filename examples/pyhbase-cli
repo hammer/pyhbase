@@ -21,6 +21,7 @@ if __name__=="__main__":
       enable_table table
       disable_table table
       drop table
+      truncate table
       flush table
 
       put table row family1:qualifier1 value1 [family2:qualifier2 value2 ...]
@@ -89,6 +90,11 @@ if __name__=="__main__":
       usage()
       sys.exit(1)
     print connection.drop(*args)
+  elif cmd == 'truncate':
+    if len(args) != 1:
+      usage()
+      sys.exit(1)
+    print connection.truncate(*args)
   elif cmd == 'enable_table':
     if len(args) != 1:
       usage()

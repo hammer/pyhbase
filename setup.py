@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name="PyHBase",
-      version='0.0.9',
+      version='0.0.10',
       description="High-level Python interface to HBase",
       url="http://github.com/hammer/pyhbase/",
       packages=['pyhbase'],

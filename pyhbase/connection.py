@@ -101,6 +101,11 @@ class HBaseConnection(object):
     self.requestor.request("deleteTable", {"table": table})
     return self.flush(".META.")
 
+  def truncate(self, table):
+    table_descriptor = self.describe_table(table)
+    self.drop(table)
+    return self.requestor.request("createTable", {"table": table_descriptor})
+
   # NB: flush is an asynchronous operation, so don't retry
   def flush(self, table):
     self.requestor.request("flush", {"table": table})

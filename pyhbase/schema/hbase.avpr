@@ -264,6 +264,14 @@
       "response" : "boolean",
       "errors" : [ "AIOError" ]
     },
+    "tableExists" : {
+      "request" : [ {
+        "name" : "table",
+        "type" : "bytes"
+      } ],
+      "response" : "boolean",
+      "errors" : [ "AIOError" ]
+    },
     "listTables" : {
       "request" : [ ],
       "response" : {

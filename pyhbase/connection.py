@@ -73,6 +73,11 @@ class HBaseConnection(object):
     """Determine if a table is enabled."""
     return self.requestor.request("isTableEnabled", {"table": table})
 
+  @retry_wrapper
+  def table_exists(self, table):
+    """Determine if a table exists."""
+    return self.requestor.request("tableExists", {"table": table})
+
   #
   # Administrative Operations
   #

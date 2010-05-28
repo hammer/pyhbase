@@ -14,18 +14,16 @@ if __name__=="__main__":
       describe_table table
       describe_family table family
       is_table_enabled table
+      table_exists table
 
       create_table table [family1 [family2 ...]]
       enable_table table
       disable_table table
 
-      get table row [family1[:qualifier1] [family2[:qualifier2] ...]]
-
       put table row family1:qualifier1 value1 [family2:qualifier2 value2 ...]
-
-      scan table number_of_rows
-
+      get table row [family1[:qualifier1] [family2[:qualifier2] ...]]
       delete table row [family1[:qualifier1] [family2[:qualifier2] ...]]
+      scan table number_of_rows
   """ % sys.argv[0]
 
   if len(sys.argv) <= 1 or sys.argv[1] == '--help':
@@ -68,6 +66,11 @@ if __name__=="__main__":
       usage()
       sys.exit(1)
     print connection.is_table_enabled(*args)
+  elif cmd == 'table_exists':
+    if len(args) != 1:
+      usage()
+      sys.exit(1)
+    print connection.table_exists(*args)
   elif cmd == 'create_table':
     if len(args) < 1:
       usage()

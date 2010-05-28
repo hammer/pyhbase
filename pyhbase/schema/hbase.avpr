@@ -240,6 +240,14 @@
       "response" : "null",
       "errors" : [ "AIOError", "AIllegalArgument", "ATableExists", "AMasterNotRunning" ]
     },
+    "deleteTable" : {
+      "request" : [ {
+        "name" : "table",
+        "type" : "bytes"
+      } ],
+      "response" : "null",
+      "errors" : [ "AIOError" ]
+    },
     "enableTable" : {
       "request" : [ {
         "name" : "table",
@@ -249,6 +257,14 @@
       "errors" : [ "AIOError" ]
     },
     "disableTable" : {
+      "request" : [ {
+        "name" : "table",
+        "type" : "bytes"
+      } ],
+      "response" : "null",
+      "errors" : [ "AIOError" ]
+    },
+    "flush" : {
       "request" : [ {
         "name" : "table",
         "type" : "bytes"

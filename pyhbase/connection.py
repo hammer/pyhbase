@@ -94,6 +94,17 @@ class HBaseConnection(object):
     if families: table_descriptor["families"] = families
     return self.requestor.request("createTable", {"table": table_descriptor})
 
+  # TODO(hammer): Automatically major_compact .META. too?
+  # NB: flush is an asynchronous operation, so don't retry
+  def drop(self, table):
+    self.disable_table(table)
+    self.requestor.request("deleteTable", {"table": table})
+    return self.flush(".META.")
+
+  # NB: flush is an asynchronous operation, so don't retry
+  def flush(self, table):
+    self.requestor.request("flush", {"table": table})
+
   @retry_wrapper
   def enable_table(self, table):
     return self.requestor.request("enableTable", {"table": table})

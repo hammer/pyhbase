@@ -272,6 +272,11 @@
       "response" : "boolean",
       "errors" : [ "AIOError" ]
     },
+    "getHBaseVersion" : {
+      "request" : [ ],
+      "response" : "string",
+      "errors" : [ "AIOError" ]
+    },
     "listTables" : {
       "request" : [ ],
       "response" : {

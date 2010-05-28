@@ -59,6 +59,11 @@ class HBaseConnection(object):
     return self.requestor.request("listTables", {})
 
   @retry_wrapper
+  def get_hbase_version(self):
+    """Get HBase version."""
+    return self.requestor.request("getHBaseVersion", {})
+
+  @retry_wrapper
   def describe_table(self, table):
     """Grab table information."""
     return self.requestor.request("describeTable", {"table": table})

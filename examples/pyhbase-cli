@@ -15,6 +15,7 @@ if __name__=="__main__":
       describe_family table family
       is_table_enabled table
       table_exists table
+      get_hbase_version
 
       create_table table [family1 [family2 ...]]
       enable_table table
@@ -51,6 +52,11 @@ if __name__=="__main__":
       usage()
       sys.exit(1)
     print connection.list_tables(*args)
+  elif cmd == 'get_hbase_version':
+    if len(args) != 0:
+      usage()
+      sys.exit(1)
+    print connection.get_hbase_version(*args)
   elif cmd == 'describe_table':
     if len(args) != 1:
       usage()

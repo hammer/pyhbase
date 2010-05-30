@@ -63,6 +63,10 @@ class HBaseConnection(object):
     """Get HBase version."""
     return self.requestor.request("getHBaseVersion", {})
 
+  def get_cluster_status(self):
+    """Get cluster status."""
+    return self.requestor.request("getClusterStatus", {})
+
   @retry_wrapper
   def describe_table(self, table):
     """Grab table information."""

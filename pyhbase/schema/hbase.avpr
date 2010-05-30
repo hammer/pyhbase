@@ -203,6 +203,134 @@
       }, "null" ]
     } ]
   }, {
+    "type" : "record",
+    "name" : "AServerAddress",
+    "fields" : [ {
+      "name" : "bindAddress",
+      "type" : "string"
+    }, {
+      "name" : "hostname",
+      "type" : "string"
+    }, {
+      "name" : "inetSocketAddress",
+      "type" : "string"
+    }, {
+      "name" : "port",
+      "type" : "int"
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "ARegionLoad",
+    "fields" : [ {
+      "name" : "memStoreSizeMB",
+      "type" : "int"
+    }, {
+      "name" : "name",
+      "type" : "bytes"
+    }, {
+      "name" : "storefileIndexSizeMB",
+      "type" : "int"
+    }, {
+      "name" : "storefiles",
+      "type" : "int"
+    }, {
+      "name" : "storefileSizeMB",
+      "type" : "int"
+    }, {
+      "name" : "stores",
+      "type" : "int"
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "AServerLoad",
+    "fields" : [ {
+      "name" : "load",
+      "type" : "int"
+    }, {
+      "name" : "maxHeapMB",
+      "type" : "int"
+    }, {
+      "name" : "memStoreSizeInMB",
+      "type" : "int"
+    }, {
+      "name" : "numberOfRegions",
+      "type" : "int"
+    }, {
+      "name" : "numberOfRequests",
+      "type" : "int"
+    }, {
+      "name" : "regionsLoad",
+      "type" : [ {
+        "type" : "array",
+        "items" : "ARegionLoad"
+      }, "null" ]
+    }, {
+      "name" : "storefileIndexSizeInMB",
+      "type" : "int"
+    }, {
+      "name" : "storefiles",
+      "type" : "int"
+    }, {
+      "name" : "storefileSizeInMB",
+      "type" : "int"
+    }, {
+      "name" : "usedHeapMB",
+      "type" : "int"
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "AServerInfo",
+    "fields" : [ {
+      "name" : "infoPort",
+      "type" : "int"
+    }, {
+      "name" : "load",
+      "type" : "AServerLoad"
+    }, {
+      "name" : "serverAddress",
+      "type" : "AServerAddress"
+    }, {
+      "name" : "serverName",
+      "type" : "string"
+    }, {
+      "name" : "startCode",
+      "type" : "long"
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "AClusterStatus",
+    "fields" : [ {
+      "name" : "averageLoad",
+      "type" : "double"
+    }, {
+      "name" : "deadServerNames",
+      "type" : [ {
+        "type" : "array",
+        "items" : "string"
+      }, "null" ]
+    }, {
+      "name" : "deadServers",
+      "type" : "int"
+    }, {
+      "name" : "hbaseVersion",
+      "type" : "string"
+    }, {
+      "name" : "regionsCount",
+      "type" : "int"
+    }, {
+      "name" : "requestsCount",
+      "type" : "int"
+    }, {
+      "name" : "serverInfos",
+      "type" : [ {
+        "type" : "array",
+        "items" : "AServerInfo"
+      }, "null" ]
+    }, {
+      "name" : "servers",
+      "type" : "int"
+    } ]
+  }, {
     "type" : "error",
     "name" : "AIOError",
     "fields" : [ {
@@ -322,6 +450,11 @@
     "getHBaseVersion" : {
       "request" : [ ],
       "response" : "string",
+      "errors" : [ "AIOError" ]
+    },
+    "getClusterStatus" : {
+      "request" : [ ],
+      "response" : "AClusterStatus",
       "errors" : [ "AIOError" ]
     },
     "listTables" : {

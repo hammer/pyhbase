@@ -511,6 +511,29 @@
       "response" : "null",
       "errors" : [ "AIOError" ]
     },
+    "incrementColumnValue" : {
+      "request" : [ {
+        "name" : "table",
+        "type" : "bytes"
+      }, {
+        "name" : "row",
+        "type" : "bytes"
+      }, {
+        "name" : "family",
+        "type" : "bytes"
+      }, {
+        "name" : "qualifier",
+        "type" : "bytes"
+      }, {
+        "name" : "amount",
+        "type" : "long"
+      }, {
+        "name" : "writeToWAL",
+        "type" : "boolean"
+      } ],
+      "response" : "long",
+      "errors" : [ "AIOError" ]
+    },
     "get" : {
       "request" : [ {
         "name" : "table",

@@ -164,6 +164,14 @@ class HBaseConnection(object):
     params = {"table": table, "put": put}
     return self.requestor.request("put", params)
 
+  @retry_wrapper
+  def incr(self, table, row, *column_and_amount):
+    family, qualifier = column_and_amount[0].split(":")
+    amount = 1
+    if len(column_and_amount) > 1:
+      amount = column_and_amount[1]
+    return self.requestor.request("incrementColumnValue", {"table": table, "row": row, "family": family, "qualifier": qualifier, "amount": int(amount), "writeToWAL": True})
+
   #
   # Delete
   #

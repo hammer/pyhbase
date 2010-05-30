@@ -28,6 +28,7 @@ if __name__=="__main__":
       flush table
 
       put table row family1:qualifier1 value1 [family2:qualifier2 value2 ...]
+      incr table row family:qualifier [amount]
       get table row [family1[:qualifier1] [family2[:qualifier2] ...]]
       delete table row [family1[:qualifier1] [family2[:qualifier2] ...]]
       scan table number_of_rows
@@ -133,6 +134,11 @@ if __name__=="__main__":
       usage()
       sys.exit(1)
     print connection.put(*args)
+  elif cmd == 'incr':
+    if len(args) not in [3, 4]:
+      usage()
+      sys.exit(1)
+    print connection.incr(*args)
   elif cmd == 'scan':
     if len(args) != 2:
       usage()

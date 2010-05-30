@@ -10,16 +10,17 @@ if __name__=="__main__":
   Usage: %s [-h host[:port]] command [arg1 [arg2...]]
 
   Commands:
+      get_hbase_version
       list_tables
       describe_table table
-      describe_family table family
       is_table_enabled table
       table_exists table
-      get_hbase_version
+      describe_family table family
 
       create_table table [family1 [family2 ...]]
       enable_table table
       disable_table table
+      alter table (add|delete) family
       drop table
       truncate table
       flush table
@@ -85,6 +86,11 @@ if __name__=="__main__":
       usage()
       sys.exit(1)
     print connection.create_table(*args)
+  elif cmd == 'alter':
+    if len(args) != 3:
+      usage()
+      sys.exit(1)
+    print connection.alter(*args)
   elif cmd == 'drop':
     if len(args) != 1:
       usage()

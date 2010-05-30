@@ -248,6 +248,53 @@
       "response" : "null",
       "errors" : [ "AIOError" ]
     },
+    "modifyTable" : {
+      "request" : [ {
+        "name" : "table",
+        "type" : "bytes"
+      }, {
+        "name" : "tableDescriptor",
+        "type" : "ATableDescriptor"
+      } ],
+      "response" : "null",
+      "errors" : [ "AIOError" ]
+    },
+    "addFamily" : {
+      "request" : [ {
+        "name" : "table",
+        "type" : "bytes"
+      }, {
+        "name" : "family",
+        "type" : "AFamilyDescriptor"
+      } ],
+      "response" : "null",
+      "errors" : [ "AIOError" ]
+    },
+    "deleteFamily" : {
+      "request" : [ {
+        "name" : "table",
+        "type" : "bytes"
+      }, {
+        "name" : "family",
+        "type" : "bytes"
+      } ],
+      "response" : "null",
+      "errors" : [ "AIOError" ]
+    },
+    "modifyFamily" : {
+      "request" : [ {
+        "name" : "table",
+        "type" : "bytes"
+      }, {
+        "name" : "familyName",
+        "type" : "bytes"
+      }, {
+        "name" : "familyDescriptor",
+        "type" : "AFamilyDescriptor"
+      } ],
+      "response" : "null",
+      "errors" : [ "AIOError" ]
+    },
     "enableTable" : {
       "request" : [ {
         "name" : "table",
@@ -272,6 +319,19 @@
       "response" : "null",
       "errors" : [ "AIOError" ]
     },
+    "getHBaseVersion" : {
+      "request" : [ ],
+      "response" : "string",
+      "errors" : [ "AIOError" ]
+    },
+    "listTables" : {
+      "request" : [ ],
+      "response" : {
+        "type" : "array",
+        "items" : "ATableDescriptor"
+      },
+      "errors" : [ "AIOError" ]
+    },
     "isTableEnabled" : {
       "request" : [ {
         "name" : "table",
@@ -286,19 +346,6 @@
         "type" : "bytes"
       } ],
       "response" : "boolean",
-      "errors" : [ "AIOError" ]
-    },
-    "getHBaseVersion" : {
-      "request" : [ ],
-      "response" : "string",
-      "errors" : [ "AIOError" ]
-    },
-    "listTables" : {
-      "request" : [ ],
-      "response" : {
-        "type" : "array",
-        "items" : "ATableDescriptor"
-      },
       "errors" : [ "AIOError" ]
     },
     "describeTable" : {
@@ -320,17 +367,6 @@
       "response" : "AFamilyDescriptor",
       "errors" : [ "AIOError" ]
     },
-    "get" : {
-      "request" : [ {
-        "name" : "table",
-        "type" : "bytes"
-      }, {
-        "name" : "get",
-        "type" : "AGet"
-      } ],
-      "response" : "AResult",
-      "errors" : [ "AIOError" ]
-    },
     "put" : {
       "request" : [ {
         "name" : "table",
@@ -340,6 +376,17 @@
         "type" : "APut"
       } ],
       "response" : "null",
+      "errors" : [ "AIOError" ]
+    },
+    "get" : {
+      "request" : [ {
+        "name" : "table",
+        "type" : "bytes"
+      }, {
+        "name" : "get",
+        "type" : "AGet"
+      } ],
+      "response" : "AResult",
       "errors" : [ "AIOError" ]
     },
     "scannerOpen" : {

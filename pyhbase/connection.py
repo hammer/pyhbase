@@ -94,6 +94,18 @@ class HBaseConnection(object):
     if families: table_descriptor["families"] = families
     return self.requestor.request("createTable", {"table": table_descriptor})
 
+  # NB: Delete is an asynchronous operation, so don't retry
+  def alter(self, table, command, family):
+    self.disable_table(table)
+    if command == "add":
+      self.requestor.request("addFamily", {"table": table, "family": {"name": family}})
+    elif command == "delete":
+      self.requestor.request("deleteFamily", {"table": table, "family": family})
+    else:
+      return "Unknown alter command: %s" % command
+    self.flush(".META.")
+    return self.enable_table(table)
+
   # TODO(hammer): Automatically major_compact .META. too?
   # NB: flush is an asynchronous operation, so don't retry
   def drop(self, table):

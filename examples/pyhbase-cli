@@ -11,27 +11,39 @@ if __name__=="__main__":
   Usage: %s [-h host[:port]] command [arg1 [arg2...]]
 
   Commands:
-      get_hbase_version
-      get_cluster_status
-      list_tables
-      describe_table table
-      is_table_enabled table
-      table_exists table
-      describe_family table family
 
-      create_table table [family1 [family2 ...]]
-      enable_table table
-      disable_table table
-      alter table (add|delete) family
-      drop table
-      truncate table
-      flush table
+      Cluster metadata:
+        get_hbase_version
+        get_cluster_status
+        list_tables
 
-      put table row family1:qualifier1 value1 [family2:qualifier2 value2 ...]
-      incr table row family:qualifier [amount]
-      get table row [family1[:qualifier1] [family2[:qualifier2] ...]]
-      delete table row [family1[:qualifier1] [family2[:qualifier2] ...]]
-      scan table number_of_rows
+      Table metadata:
+        describe_table table
+        is_table_enabled table
+        table_exists table
+
+      Family metadata:
+        describe_family table family
+
+      Table admin:
+        create_table table [family1 [family2 ...]]
+        drop table
+        truncate table
+        enable_table table
+        disable_table table
+        flush table
+        split table
+        alter table (add|delete) family
+
+      Single Row DML:
+        get table row [family1[:qualifier1] [family2[:qualifier2] ...]]
+        exists table row [family1[:qualifier1] [family2[:qualifier2] ...]]
+        put table row family1:qualifier1 value1 [family2:qualifier2 value2 ...]
+        incr table row family:qualifier [amount]
+        delete table row [family1[:qualifier1] [family2[:qualifier2] ...]]
+      
+      Multi-Row DML:
+        scan table number_of_rows
   """ % sys.argv[0]
 
   if len(sys.argv) <= 1 or sys.argv[1] == '--help':
@@ -124,11 +136,21 @@ if __name__=="__main__":
       usage()
       sys.exit(1)
     print connection.flush(*args)
+  elif cmd == 'split':
+    if len(args) != 1:
+      usage()
+      sys.exit(1)
+    print connection.split(*args)
   elif cmd == 'get':
     if len(args) < 2:
       usage()
       sys.exit(1)
     print connection.get(*args)
+  elif cmd == 'exists':
+    if len(args) < 2:
+      usage()
+      sys.exit(1)
+    print connection.exists(*args)
   elif cmd == 'put':
     if len(args) < 4 or not len(args) % 2 == 0:
       usage()

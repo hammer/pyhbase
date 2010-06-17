@@ -126,6 +126,10 @@ class HBaseConnection(object):
   def flush(self, table):
     self.requestor.request("flush", {"table": table})
 
+  # NB: split is an asynchronous operation, so don't retry
+  def split(self, table):
+    self.requestor.request("split", {"table": table})
+
   @retry_wrapper
   def enable_table(self, table):
     return self.requestor.request("enableTable", {"table": table})
@@ -148,6 +152,15 @@ class HBaseConnection(object):
     if columns: get["columns"] = columns
     params = {"table": table, "get": get}
     return self.requestor.request("get", params)
+
+  @retry_wrapper
+  def exists(self, table, row, *columns):
+    get = {"row": row}
+    columns = [len(column) > 1 and {"family": column[0], "qualifier": column[1]} or {"family": column[0]}
+               for column in map(lambda s: s.split(":"), columns)]
+    if columns: get["columns"] = columns
+    params = {"table": table, "get": get}
+    return self.requestor.request("exists", params)
 
   #
   # Put

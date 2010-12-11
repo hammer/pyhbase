@@ -165,7 +165,7 @@ if __name__=="__main__":
     if len(args) != 2:
       usage()
       sys.exit(1)
-    print connection.scan(*args)
+    pprint.pprint(connection.scan(args[0], args[1]))
   elif cmd == 'delete':
     if len(args) < 2:
       usage()

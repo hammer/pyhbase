@@ -204,10 +204,30 @@ class HBaseConnection(object):
 
   # TODO(hammer): Figure out cleaner, more functional command-line
   @retry_wrapper
-  def scan(self, table, number_of_rows):
-    params = {"table": table, "scan": {}}
+  def scan(self, table, number_of_rows, start_row=None,
+           stop_row=None, columns=[], timestamp=None):
+
+    if columns:
+      columns = [{"family": column[0], "qualifier": column[1]}
+                 if len(column) > 1 else {"family": column[0]}
+                 for column in map(lambda s: s.split(":"), columns)]
+
+    params = {
+      "table": table,
+      "scan": {
+        "startRow": start_row,
+        "stopRow": stop_row,
+        "columns": columns,
+        "timestamp": timestamp
+        },
+      }
+
     scanner_id = self.requestor.request("scannerOpen", params)
-    results = self.requestor.request("scannerGetRows", {"scannerId": scanner_id, "numberOfRows": int(number_of_rows)})
+
+    results = self.requestor.request("scannerGetRows", {
+        "scannerId": scanner_id,
+        "numberOfRows": int(number_of_rows),
+        })
+
     self.requestor.request("scannerClose", {"scannerId": scanner_id})
     return results
-

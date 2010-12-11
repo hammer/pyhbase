@@ -205,7 +205,7 @@ class HBaseConnection(object):
   # TODO(hammer): Figure out cleaner, more functional command-line
   @retry_wrapper
   def scan(self, table, number_of_rows, start_row=None,
-           stop_row=None, columns=[], timestamp=None):
+           stop_row=None, columns=None, timestamp=None):
 
     if columns:
       columns = [{"family": column[0], "qualifier": column[1]}

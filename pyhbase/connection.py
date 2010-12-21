@@ -148,7 +148,7 @@ class HBaseConnection(object):
   def get(self, table, row, *columns):
     get = {"row": row}
     columns = [len(column) > 1 and {"family": column[0], "qualifier": column[1]} or {"family": column[0]}
-               for column in map(lambda s: s.split(":"), columns)]
+               for column in map(lambda s: s.split(":", 1), columns)]
     if columns: get["columns"] = columns
     params = {"table": table, "get": get}
     return self.requestor.request("get", params)
@@ -157,7 +157,7 @@ class HBaseConnection(object):
   def exists(self, table, row, *columns):
     get = {"row": row}
     columns = [len(column) > 1 and {"family": column[0], "qualifier": column[1]} or {"family": column[0]}
-               for column in map(lambda s: s.split(":"), columns)]
+               for column in map(lambda s: s.split(":", 1), columns)]
     if columns: get["columns"] = columns
     params = {"table": table, "get": get}
     return self.requestor.request("exists", params)
@@ -171,7 +171,7 @@ class HBaseConnection(object):
   @retry_wrapper
   def put(self, table, row, *column_values):
     put = {"row": row}
-    column_values = [{"family": column.split(":")[0], "qualifier": column.split(":")[1], "value": value}
+    column_values = [{"family": column.split(":", 1)[0], "qualifier": column.split(":", 1)[1], "value": value}
                      for column, value in zip(column_values[::2], column_values[1::2])]
     put["columnValues"] = column_values
     params = {"table": table, "put": put}
@@ -179,7 +179,7 @@ class HBaseConnection(object):
 
   @retry_wrapper
   def incr(self, table, row, *column_and_amount):
-    family, qualifier = column_and_amount[0].split(":")
+    family, qualifier = column_and_amount[0].split(":", 1)
     amount = 1
     if len(column_and_amount) > 1:
       amount = column_and_amount[1]
@@ -193,7 +193,7 @@ class HBaseConnection(object):
   def delete(self, table, row, *columns):
     delete = {"row": row}
     columns = [len(column) > 1 and {"family": column[0], "qualifier": column[1]} or {"family": column[0]}
-               for column in map(lambda s: s.split(":"), columns)]
+               for column in map(lambda s: s.split(":", 1), columns)]
     if columns: delete["columns"] = columns
     params = {"table": table, "delete": delete}
     return self.requestor.request("delete", params)
@@ -210,7 +210,7 @@ class HBaseConnection(object):
     if columns:
       columns = [{"family": column[0], "qualifier": column[1]}
                  if len(column) > 1 else {"family": column[0]}
-                 for column in map(lambda s: s.split(":"), columns)]
+                 for column in map(lambda s: s.split(":", 1), columns)]
 
     params = {
       "table": table,
